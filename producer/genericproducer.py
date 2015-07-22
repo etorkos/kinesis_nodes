@@ -21,7 +21,7 @@ import time
 import datetime
 
 from argparse import RawTextHelpFormatter
-from random import choice, random
+import random
 from string import lowercase
 from boto.kinesis.exceptions import ResourceNotFoundException
 
@@ -122,7 +122,7 @@ class KinesisPoster(threading.Thread):
 
     def generate_records(self):
         for i in range(0,100):
-            self._pending_records.extend(json.dumps({ "building": "80 Pine", "sensor": "Sensor "+str(i), "value": random.randint(65,90), "time": datetime.now().isoformat(' ')}))
+            self._pending_records.extend(json.dumps({ "building": "80 Pine", "sensor": "Sensor "+str(i), "value": random.randint(65,90), "time": datetime.datetime.now().isoformat(' ')}))
 
     def run(self):
         start = datetime.datetime.now()

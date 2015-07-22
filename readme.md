@@ -7,13 +7,13 @@ Producer:
 ref: https://github.com/awslabs/kinesis-poster-worker
 
 from pip:
-$ pip install boto
+	$ pip install boto
 
 or from source:
-$ git clone git://github.com/boto/boto.git
-$ cd boto
-$ python setup.py install
-python genericproducer.py ResidentialBuildings
+	$ git clone git://github.com/boto/boto.git
+	$ cd boto
+	$ python setup.py install
+	$ python genericproducer.py ResidentialBuildings
 
 
 
