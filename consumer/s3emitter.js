@@ -15,7 +15,7 @@ permissions and limitations under the License.
 
 var AWS = require('aws-sdk');
 var util = require('util');
-var logger = require('../../util/logger');
+var logger = require('./logger');
 
 function s3Emitter(config) {
   var s3Client;

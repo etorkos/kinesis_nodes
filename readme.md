@@ -3,7 +3,7 @@ Kinesis nodes - temporary file structure
 Producers in python to be loaded in embedded gateway.
 Consumers in NodeJS to be installed onto an EC2 EBS cluster
 
-Producer:
+Producer Node:
 ref: https://github.com/awslabs/kinesis-poster-worker
 
 # from pip:
@@ -14,11 +14,16 @@ ref: https://github.com/awslabs/kinesis-poster-worker
 	$ cd boto
 	$ python setup.py install
 
-
+    # install git
+    $ sudo yum install git
+    # clone the git repository to work with the samples
+    $ git clone https://github.com/awslabs/amazon-kinesis-client-nodejs.git kclnodejs
+    $ cd kclnodejs/samples/basic_sample/producer/
+    # run the sample producer
 	$ python genericproducer.py ResidentialBuildings
 
 
-Consumer:
+Consumer Node:
 ref: https://github.com/awslabs/amazon-kinesis-client-nodejs
 # install AWS CLI credentials to talk with Kinesis
     $ sudo pip install awscli
@@ -40,10 +45,6 @@ then
     $ cd kclnodejs/samples/basic_sample/producer/
     # download dependencies
     $ npm install
-    # run the sample producer
-    $ node sample_kinesis_producer_app.js &
-
-    # ...and in another terminal, run the sample consumer
     $ export PATH=$PATH:kclnodejs/bin
     $ cd kclnodejs/samples/basic_sample/consumer/
 
