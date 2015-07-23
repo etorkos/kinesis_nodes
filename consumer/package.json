@@ -1,0 +1,25 @@
+{
+  "name": "kinesis-worker",
+  "description": "Kinesis Worker Client Libray in Node.js.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Prescriptive Data",
+    "url": "http://aws.amazon.com/"
+  },
+  "main": "index.js",
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "bin": {
+    "kcl-bootstrap": "bin/kcl-bootstrap",
+    "kcl-bootstrap.bat": "bin/kcl-bootstrap.bat"
+  },
+  "scripts": {
+    "start": "node processor.js"
+  },
+  "dependencies": {
+    "async": "~0.9.0",
+    "aws-sdk": "2.x",
+
+  }
+}

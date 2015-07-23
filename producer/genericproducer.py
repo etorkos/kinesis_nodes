@@ -109,7 +109,7 @@ class KinesisPoster(threading.Thread):
                 data=self.file_contents, partition_key=self.partition_key)
             self.total_records += 1
             if self.quiet is False:
-                print ("-= put seqNum:", response['SequenceNumber'])
+                print ("-= put seqNum:", response['SequenceNumber'], data, '----------')
 
     def put_records(self, records):
         """Put the given records in the Kinesis stream."""

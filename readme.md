@@ -1,4 +1,4 @@
-Kinesis nodes- temporary file structure
+Kinesis nodes - temporary file structure
 
 Producers in python to be loaded in embedded gateway.
 Consumers in NodeJS to be installed onto an EC2 EBS cluster
@@ -6,19 +6,31 @@ Consumers in NodeJS to be installed onto an EC2 EBS cluster
 Producer:
 ref: https://github.com/awslabs/kinesis-poster-worker
 
-from pip:
+# from pip:
 	$ pip install boto
 
-or from source:
+# or from source:
 	$ git clone git://github.com/boto/boto.git
 	$ cd boto
 	$ python setup.py install
-	$ python genericproducer.py ResidentialBuildings
 
+
+	$ python genericproducer.py ResidentialBuildings
 
 
 Consumer:
 ref: https://github.com/awslabs/amazon-kinesis-client-nodejs
+# install AWS CLI credentials to talk with Kinesis
+    $ sudo pip install awscli
+or
+    $ curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
+    $ unzip awscli-bundle.zip
+    $ sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
+
+then
+    $ cd ~
+    $ aws configure 
+    *** Make sure to use user credentials with kinesis enabled *** 
 
 # install node.js, npm and git
     $ sudo yum install nodejs npm --enablerepo=epel
@@ -34,7 +46,8 @@ ref: https://github.com/awslabs/amazon-kinesis-client-nodejs
     # ...and in another terminal, run the sample consumer
     $ export PATH=$PATH:kclnodejs/bin
     $ cd kclnodejs/samples/basic_sample/consumer/
-    #option A
+
+    # Start the consumer with command option A
     $ kcl-bootstrap --java /usr/bin/java -e -p ./sample.properties > consumer.out
-    #option B
+    # Start the consumer with command option B
     $ kcl-bootstrap --java /usr/bin/java -e -p ./sample.properties > consumer.out 2>&1 &
