@@ -35,25 +35,30 @@ function recordProcessor() {
 
     initialize: function(initializeInput, completeCallback) {
       shardId = initializeInput.shardId;
-
+      fs.appendFile("log.txt", "initializing recordProcessor... \n", function(err){ });
       completeCallback();
     },
 
     processRecords: function(processRecordsInput, completeCallback) {
+      fs.appendFile("log.txt", "processing... \n", function(err){ });
       if (!processRecordsInput || !processRecordsInput.records) {
         completeCallback();
         return;
       }
       var records = processRecordsInput.records;
       var record, data, sequenceNumber, partitionKey;
+      var dataGroup;
+      fs.appendFile("log.txt", records, function(err){ });
       for (var i = 0 ; i < records.length ; ++i) {
         record = records[i];
         data = new Buffer(record.data, 'base64').toString();
         sequenceNumber = record.sequenceNumber;
         partitionKey = record.partitionKey;
-        fs.appendFile("log.txt", data, function(err){ });
+        dataGroup+=data;
         log.info(util.format('ShardID: %s, Record: %s, SeqenceNumber: %s, PartitionKey:%s', shardId, data, sequenceNumber, partitionKey));
       }
+      log.info(util.format(':::RECORD::: %s', dataGroup));
+      dataGroup='';
       if (!sequenceNumber) {
         completeCallback();
         return;

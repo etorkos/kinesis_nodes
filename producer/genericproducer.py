@@ -22,6 +22,7 @@ import datetime
 
 from argparse import RawTextHelpFormatter
 import random
+from random import choice
 from string import lowercase
 from boto.kinesis.exceptions import ResourceNotFoundException
 
@@ -32,6 +33,8 @@ from boto.kinesis.exceptions import ResourceNotFoundException
 #     [Credentials]
 #     aws_access_key_id = <your access key>
 #     aws_secret_access_key = <your secret key>
+
+make_string = lambda x: "".join(choice(lowercase) for i in range(x))
 
 def get_or_create_stream(stream_name, shard_count):
     stream = None
@@ -75,7 +78,9 @@ class KinesisPoster(threading.Thread):
         self.partition_key = partition_key
         self.quiet = quiet
         self.default_records = [
-            "make_string(100)", "make_string(1000)", "make_string(5000)"
+            make_string(100), make_string(1000), make_string(500),
+            make_string(5000), make_string(10), make_string(750),
+            make_string(10), make_string(2000), make_string(500)
         ]
         self.poster_time = poster_time
         self.total_records = 0
@@ -114,6 +119,7 @@ class KinesisPoster(threading.Thread):
     def put_records(self, records):
         """Put the given records in the Kinesis stream."""
         for record in records:
+            print("Record ", record)
             response = kinesis.put_record(
                 stream_name=self.stream_name,
                 data=record, partition_key=self.partition_key)
@@ -121,8 +127,10 @@ class KinesisPoster(threading.Thread):
                 print ("-= put seqNum:", response['SequenceNumber'])
 
     def generate_records(self):
-        for i in range(0,100):
-            self._pending_records.extend(json.dumps({ "building": "80 Pine", "sensor": "Sensor "+str(i), "value": random.randint(65,90), "time": datetime.datetime.now().isoformat(' ')}))
+        jsonStringArray = []
+        for i in range(0,10):
+            jsonStringArray.append( json.dumps({ "building": "80 Pine", "sensor": "Sensor "+str(i), "value": random.randint(65,90), "time": datetime.datetime.now().isoformat(' ')}))
+        self._pending_records.extend(jsonStringArray)
 
     def run(self):
         start = datetime.datetime.now()
@@ -131,6 +139,7 @@ class KinesisPoster(threading.Thread):
             if self.file_contents:
                 self.put_file_contents()
             else:
+                #self.add_records(self.default_records)
                 self.generate_records()
             records_put = self.put_all_records()
             if self.quiet is False:
@@ -153,7 +162,7 @@ if __name__ == '__main__':
 stream [default: 'PyKinesisExample-##']''')
     parser.add_argument('--poster_count', type=int, default=2,
         help='''the number of poster threads [default: 10]''')
-    parser.add_argument('--poster_time', type=int, default=30,
+    parser.add_argument('--poster_time', type=int, default=5,
         help='''how many seconds the poster threads should put records into
 the stream [default: 30]''')
     parser.add_argument('--record_file', type=str, default=None,

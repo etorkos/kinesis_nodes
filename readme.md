@@ -1,7 +1,7 @@
 Kinesis nodes - temporary file structure
 
-Producers in python to be loaded in embedded gateway.
-Consumers in NodeJS to be installed onto an EC2 EBS cluster
+Producers in python / BOTO to be loaded onto gateway.
+Consumers in NodeJS / aws-KCL to be installed onto an EC2 EBS cluster
 
 Producer Node:
 ref: https://github.com/awslabs/kinesis-poster-worker
@@ -49,6 +49,6 @@ then
     $ cd kclnodejs/samples/basic_sample/consumer/
 
     # Start the consumer with command option A
-    $ kcl-bootstrap --java /usr/bin/java -e -p ./sample.properties > consumer.out
+    $ node_modules/aws-kcl/bin/kcl-bootstrap --java /usr/bin/java -e -p ./sample.properties > consumer.out
     # Start the consumer with command option B
     $ kcl-bootstrap --java /usr/bin/java -e -p ./sample.properties > consumer.out 2>&1 &
