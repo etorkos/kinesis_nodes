@@ -35,7 +35,6 @@ function recordProcessor() {
 
     initialize: function(initializeInput, completeCallback) {
       shardId = initializeInput.shardId;
-      fs.appendFile("log.txt", "initializing recordProcessor... \n", function(err){ });
       completeCallback();
     },
 
@@ -48,7 +47,6 @@ function recordProcessor() {
       var records = processRecordsInput.records;
       var record, data, sequenceNumber, partitionKey;
       var dataGroup;
-      fs.appendFile("log.txt", records, function(err){ });
       for (var i = 0 ; i < records.length ; ++i) {
         record = records[i];
         data = new Buffer(record.data, 'base64').toString();

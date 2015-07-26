@@ -1,2 +1,3 @@
 boto/
 consumer/node_modules/
+consumer/application.log
