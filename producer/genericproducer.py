@@ -128,7 +128,7 @@ class KinesisPoster(threading.Thread):
 
     def generate_records(self):
         jsonStringArray = []
-        for i in range(0,10):
+        for i in range(0,50):
             jsonStringArray.append( json.dumps({ "building": "80 Pine", "sensor": "Sensor "+str(i), "value": random.randint(65,90), "time": datetime.datetime.now().isoformat(' ')}))
         self._pending_records.extend(jsonStringArray)
 
