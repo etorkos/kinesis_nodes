@@ -1,7 +1,7 @@
 var fs = require('fs'),
     Transform = require('stream').Transform,
     Writable = require('stream').Writable,
-    kinesis = require('kinesis'),
+    kinesis = require('kinesis-source'),
     KinesisStream = kinesis.KinesisStream,
     AWS = require('aws-sdk');
 
@@ -33,7 +33,7 @@ var config = {
 // would want something in the vein of the aws preferred method (if one fails, get last data push);
 // AFTER_SEQUENCE_NUMBER
 
-var kinesisSource = kinesis.stream({name: config.name });
+var kinesisSource = kinesis.stream({name: config.name, after_sequence: "49553388221229230993886166665285619452805859588804968450" });
 var output = new Writable ({objectMode: true});
 
 var s3 = new AWS.S3({params: config});
@@ -56,7 +56,7 @@ kinesisSource.pipe(bufferify).pipe(output);
 
 function process (object) {
   cache.push(object);
-  if (cache.length >= 100){
+  if (cache.length >= 1000){
     console.log('/-/-/-/-/-/-/push now to AWS/-/-/-/-/-/-/-/');
     var resonse = s3_Upload(JSON.stringify(cache));
     cache = [];
@@ -65,7 +65,7 @@ function process (object) {
 
 function alert (object) {
   var data = JSON.parse(object.toString('utf-8'))
-  console.log('utf-8', data.time);
+  console.log('utf-8', data);
   return data;
 }
 

@@ -1,0 +1,13 @@
+{
+  "name": "kinesis-producer",
+  "description": "Kinesis Producer Client in Node.js",
+  "version": "0.0.1",
+  "author": "Prescriptive Data",
+  "dependencies": {
+    "aws-sdk": "^2.1.42",
+    "kinesis": "^1.2.2",
+    "machina": "^1.1.2"
+  },
+  "devDependencies": {},
+  "engine": "node >= 0.8.0"
+}
