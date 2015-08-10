@@ -1,3 +1,4 @@
 boto/
 consumer/node_modules/
 consumer/application.log
+producer/node_modules/
