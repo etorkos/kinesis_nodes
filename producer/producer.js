@@ -1,39 +1,52 @@
 var fs = require("fs"),
 	Readable = require("stream").Readable,
 	kinesis = require('kinesis'),
-	AWS = require('aws-sdk');
-//maybe makes sense to have finite state machines (active, broken connection, recovery)
+	AWS = require('aws-sdk'),
+	FSM = require('./fsm.js'),
+	config = require('./config.js');
+// maybe makes sense to have finite state machines (active, broken connection, recovery)
+// recieves data on 
 
-kinesis.listStreams({region: 'us-east-1'}, function(err, streams){
-	if(err) throw err;
-	console.log(streams); 
-})
+var producer = function () { }
 
-var readable = new Readable({objectMode: true});
-readable._read = function (){
-	for(var a=0; a<4000; a++){
-		var temp = { "building": "211 Housing", "sensor": "Sensor "+a.toString(), "value": getRandomIntInclusive(65,90), "time": new Date()}
-		this.push({PartitionKey: a.toString(), Data: new Buffer(JSON.stringify(temp))});
+	function sendData (data){
+		if (typeof data !== object){
+
+		}
 	}
-	this.push(null);
-}
+	function getRandomIntInclusive(min, max){
+		return Math.floor(Math.random() * (max - min + 1)) + min;
+	}
 
-var config = {
-  name: 'teststream',
-  region: 'us-east-1',
-  Bucket: 'residentialbuildings-1',
-  Key: 'log1'
-}
+	var readable = new Readable({objectMode: true});
+	readable._read = function (){
+		for(var a=0; a<4000; a++){
+			var temp = { "building": "211 Housing", "sensor": "Sensor "+a.toString(), "value": getRandomIntInclusive(65,90), "time": new Date()}
+			this.push({PartitionKey: a.toString(), Data: new Buffer(JSON.stringify(temp))});
+		}
+		this.push(null);
+	}
 
-var kinesisStream = kinesis.stream({name: config.name, writeConcurrency: 5});
 
-readable.pipe(kinesisStream).on('end', function() { 
-	console.log('done');
-}).on('error', function(errorObject){
-	console.log("error", errorObject);
-});
+	// kinesis.listStreams({region: 'us-east-1'}, function(err, streams){
+	// 	if(err) throw err;
+	// 	console.log(streams);
+	// 	if (config.name.indexOf(streams) === -1){
 
-function getRandomIntInclusive(min, max){
-	return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+	// 	}
+	// })
+	var testData = { "building": "211 Housing", "sensor": "Sensor 15", "value": getRandomIntInclusive(65,90), "time": new Date()};
+	var test = { info: "thing" }
+	FSM.start(test);
+	FSM.run(test, testData);
+	console.log('KIN', test);
 
+	var kinesisStream = kinesis.stream({name: config.name, writeConcurrency: 5});
+
+	readable.pipe(kinesisStream).on('end', function() { 
+		console.log('done');
+	}).on('error', function(errorObject){
+		console.log("error", errorObject);
+	});
+
+// module.exports = producer;

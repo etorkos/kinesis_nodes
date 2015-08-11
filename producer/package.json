@@ -5,6 +5,7 @@
   "author": "Prescriptive Data",
   "dependencies": {
     "aws-sdk": "^2.1.42",
+    "bluebird": "^2.9.34",
     "kinesis": "^1.2.2",
     "machina": "^1.1.2"
   },
