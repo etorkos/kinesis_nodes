@@ -7,8 +7,17 @@
     "aws-sdk": "^2.1.42",
     "bluebird": "^2.9.34",
     "kinesis": "^1.2.2",
-    "machina": "^1.1.2"
+    "machina": "^1.1.2",
+    "mocha": "^2.2.5"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "chai": "^3.2.0",
+    "mocha": "^2.2.5"
+    },
+    "scripts" : {
+      "start": "node producer.js",
+      "test" : "mocha"
+    },
+  
   "engine": "node >= 0.8.0"
 }
