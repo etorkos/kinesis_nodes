@@ -1,45 +1,81 @@
-// #!/usr/bin/env node
-// process.stdin.pipe(FSM)
-var fs = require("fs"),
+var Promise = require('bluebird'),
 	Readable = require("stream").Readable,
 	Transform = require('stream').Transform,
+	Writable = require('stream').Writable,
 	kinesis = require('kinesis'),
 	AWS = require('aws-sdk'),
 	FSM = require('./fsm.js'),
-	config = require('./config.js');
-// maybe makes sense to have finite state machines (active, broken connection, recovery)
-// recieves data on 
+	config = require('./config.js'),
+	spawn = require('child_process').spawn,
+	fs = Promise.promisifyAll(require("fs"));
 
+/*
+Possible way forward
+var pythonDriver = spawn('python', ['bacnet.py']);
+pythonProcess.stdout.on('data', function(data) {
+   console.log('stdout: ' + data);
+});
 
+pythonProcess.stderr.on('data', function (data) {
+  console.log('stderr: ' + data);
+});
 
-	fs.readdir('filelog/', function(err, files){
-		files.forEach(function(file){
-			console.log('files', file);
-			var fileStream = fs.createReadStream('filelog/'+file);
-			fileStream.pipe(bufferify);
+pythonProcess.on('close', function (code) {
+  console.log('child process exited with code ' + code);
+});
 
-			// fs.readFile('filelog/'+file, function(err,data){
-			// 	if (err) console.log(err);
-			// 	else {
-			// 		point = data.toString();
-			// 		point.forEach(function(datas){
-			// 			console.log('file', JSON.parse(datas));
-			// 		})
-					
-			// 	}
-			// })
-		});
-	});
-	
-	var data = [{PartitionKey: "1", Data: new Buffer(JSON.stringify({"val": 15, "time": new Date() }))}, {PartitionKey: "2", Data: new Buffer(JSON.stringify({"val": 25, "time": new Date() }))}, {PartitionKey: "3", Data: new Buffer(JSON.stringify({"val": 30, "time": new Date() }))}];
-	console.log('data', data);
+*/
+	var writable = new Writable({objectMode: true});
+	writable._write = function(record, encoding, cb){
+		console.log('writable',(record).toString().split(']}}'));
+	}	
+
+	// fs.readdir('filelog/', function(err, files){
+	// 	var data="";
+	// 	files.forEach(function(file){
+	// 		return new Promise(resolve,reject){
+	// 			var location = 'filelog/'+file;
+	// 			console.log('files', location);
+	// 			newStream = fs.createReadStream(location, {flags: 'r'});
+	// 			newStream.on('data', function(chunk){
+	// 				data+= chunk;
+	// 			});
+	// 			newStream.on('end', function(){
+	// 				Promise.resolve();
+	// 			});
+	// 		}
+	// 	});
+	// });
+
+	var data="";
+	var location = 'filelog/';
+	fs.readdirAsync(location).map(function(file){
+		// newStream = fs.createReadStream(location+file, {flags: 'r'});
+		// newStream.on('data', function(chunk){
+		// 	data+= chunk;
+		// });
+		// newStream.on('end', function(){
+		// 	return Promise.resolve();
+		// });
+	return fs.readFileAsync(location + file, "utf8");
+	}).then(function(content){
+		console.log(content);
+	}).catch(function(err){
+		console.log(err);
+	})
+	// var data = [{PartitionKey: "1", Data: new Buffer(JSON.stringify({"val": 15, "time": new Date() }))}, {PartitionKey: "2", Data: new Buffer(JSON.stringify({"val": 25, "time": new Date() }))}, {PartitionKey: "3", Data: new Buffer(JSON.stringify({"val": 30, "time": new Date() }))}];
+	// console.log('data', data);
 
 	var bufferify = new Transform({objectMode: true});
 	bufferify._transform = function(record, encoding, cb){
 		console.log('bufferify',record, record.Data)
 		cb(null, record.Data);
 	}
-
+	// fs.createReadStream('filelog/13-16.txt', {flags: 'r'}).pipe(writable);
+	// setTimeout(function(){
+	// 	fs.createReadStream('filelog/13-15.txt', {flags: 'r'}).pipe(writable);	
+	// },500);
+	
 
 
 // var producer = function () { 

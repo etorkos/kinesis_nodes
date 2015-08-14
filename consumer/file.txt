@@ -1,0 +1,8 @@
+click.log
+cloudformation
+consumer.js
+file.txt
+node_modules
+npm-debug.log
+package.json
+testbashstream.js

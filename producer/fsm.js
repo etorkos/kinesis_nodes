@@ -162,7 +162,6 @@ var fsm = new machina.Fsm({
 			console.log('open files', files);
 			files.forEach(function(file){
 				console.log('file', self.logDest+file);
-				var stream = fs.createReadStream(self.logDest+file);
 				try{
 					stream.pipe(bufferify).on('end', function(){
 						try{
